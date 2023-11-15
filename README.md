@@ -13,6 +13,12 @@ The Expenses Tracker Application is a mobile app that allows users to manage and
 ## Getting Started
 
 To run the Expenses Tracker Application locally, follow these steps:
+## Screenshots
+![BeFunky-collage](https://github.com/kousik-d/Expenses-Tracker/assets/102245014/5e57879a-7559-4bd4-91cf-ff1c335383d8)
+
+
+
+
 
 ### Prerequisites
 
