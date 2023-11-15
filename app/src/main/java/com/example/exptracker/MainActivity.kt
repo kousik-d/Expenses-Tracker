@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -12,10 +13,17 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -61,9 +69,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun showToast(Name:Int){
 
-    }
 
 
     fun CreateDialog(){
@@ -84,9 +90,9 @@ class MainActivity : AppCompatActivity() {
         addbtn.setOnClickListener {
             if(expensename.text.isNotEmpty() && expenseLocation.text.isNotEmpty() && expenseMoney.text.isNotEmpty()){
 
-                val money = "$ ${expenseMoney.text.toString()}"
+                val money = expenseMoney.text.toString()
                 val expense = Expense(0,expensename.text.toString(),expenseLocation.text.toString(),"",money)
-                Toast.makeText(this, "Item Inserted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Item Inserted $expense", Toast.LENGTH_SHORT).show()
                 expenseviewmodel.insertExpense(expense)
                 ExpenseAdapter.notifyDataSetChanged()
                 dialog.dismiss()
@@ -111,10 +117,21 @@ class MainActivity : AppCompatActivity() {
             R.id.Add_to_list -> CreateDialog()
             R.id.deleteAll -> DeleteAllExpense()
             R.id.sortByDate -> Toast.makeText(this,"SortBy date",Toast.LENGTH_SHORT).show()
-            R.id.sortByMoney -> Toast.makeText(this,"Sort By Money",Toast.LENGTH_SHORT).show()
+            R.id.sortByMoney -> SortByMoney()
         }
         return true
     }
+
+    //Not Working Effeciently
+    fun SortByMoney(){
+        val newList = ExpenseAdapter.list
+        newList.sortedWith(compareBy({it.ExpenseMoney}))
+        Toast.makeText(this,"${newList}",Toast.LENGTH_SHORT).show()
+        Log.i("SORTED","${newList}")
+        ExpenseAdapter.notifyDataSetChanged()
+    }
+
+
 
     private fun DeleteAllExpense() {
         expenseviewmodel.deleteAllExpense()

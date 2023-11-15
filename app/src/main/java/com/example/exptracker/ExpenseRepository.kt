@@ -14,4 +14,5 @@ class ExpenseRepository(private val expenseDataBase: ExpenseDataBase) {
 
     suspend fun deleteAllExpense() = expenseDataBase.getExpenseDao().deleteAllExpense()
 
+
 }
